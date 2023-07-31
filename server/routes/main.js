@@ -9,9 +9,27 @@ router.get("", async (req, res) => {
         "description": "A simple web site to maneg blog"
     }
 
-    const data = await Post.find()
+    // const data = await Post.find()
 
-    res.render("index", { locals, data });
+    try {
+        let perPage = 5;
+        let page = req.query.page || 1;
+
+        const data = await Post.aggregate([{ $sort: { createdAt: -1 } }]).skip(perPage * page - perPage).limit(perPage).exec()
+        const count = await Post.count();
+        let nextPage = parseInt(page) + 1;
+        let hasNextPage = nextPage <= Math.ceil(count / perPage);
+
+        res.render("index", {
+            locals,
+            data,
+            current: page,
+            nextPage: hasNextPage ? nextPage : null
+        });
+
+    } catch (error) {
+        console.log(error)
+    }
 })
 
 
