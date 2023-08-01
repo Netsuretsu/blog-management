@@ -3,6 +3,8 @@ const router = express.Router();
 const Post = require('../models/Post')
 
 // Routes
+
+//get post on home
 router.get("", async (req, res) => {
     locals = {
         "title": "Blog management",
@@ -30,6 +32,7 @@ router.get("", async (req, res) => {
     }
 })
 
+//Get single post
 router.get("/post/:id", async (req, res) => {
     try {
         let slug = req.params.id
@@ -48,7 +51,31 @@ router.get("/post/:id", async (req, res) => {
     }
 })
 
+//Search query
+router.post("/search", async (req, res) => {
+    try {
+        let searchTerm = req.body.searchTerm;
+        let searchWithNoSpecialChar = searchTerm.replace(/[^a-zA-Z0-9 ]/g, "");
 
+        const data = await Post.find({
+            $or: [
+                { title: { $regex: new RegExp(searchWithNoSpecialChar, "i") } },
+                { body: { $regex: new RegExp(searchWithNoSpecialChar, "i") } }
+            ]
+        })
+        console.log(data)
+
+        locals = {
+            title: "Search"
+        }
+        res.render("search", {
+            data,
+            locals
+        })
+    } catch (error) {
+        console.log(error)
+    }
+})
 
 
 router.get("/about", (req, res) => {

@@ -1,0 +1,23 @@
+<div class="auhtor">
+    <h1 class="author__name">Search results</h1>
+</div>
+<% if (data) { %>
+
+    <% data.forEach(post=> { %>
+        <ul class="article-ul">
+            <li>
+                <a href="/post/<%= post._id %>">
+                    <span>
+                        <%= post.title %>
+                    </span>
+                    <span class="articles-list__date">
+                        <%= post.createdAt.toDateString() %>
+                    </span>
+                </a>
+            </li>
+        </ul>
+        <% }) %>
+
+            <% } else { %>
+                <div>Nothing found</div>
+                <% } %>
