@@ -9,8 +9,6 @@ router.get("", async (req, res) => {
         "description": "A simple web site to maneg blog"
     }
 
-    // const data = await Post.find()
-
     try {
         let perPage = 5;
         let page = req.query.page || 1;
@@ -32,7 +30,23 @@ router.get("", async (req, res) => {
     }
 })
 
+router.get("/post/:id", async (req, res) => {
+    try {
+        let slug = req.params.id
+        const data = await Post.findById({ _id: slug })
 
+        locals = {
+            "title": data.title,
+        }
+        res.render("post", {
+            locals,
+            data
+        })
+
+    } catch (error) {
+        console.log(error)
+    }
+})
 
 
 
