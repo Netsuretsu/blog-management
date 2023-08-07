@@ -90,6 +90,8 @@ router.get("/contact", (req, res) => {
 
 module.exports = router;
 
+
+//Insert dummy datas
 // function insertDatas() {
 //     Post.insertMany(
 //         [
